@@ -1,0 +1,51 @@
+body {
+    padding: 20px;
+}
+
+button {
+    margin-right: 10px;
+}
+
+#pokedex_div {
+    background-color: #dc3545;
+}
+
+#pokedex_title {
+    color: white;
+    border-style: solid;
+    border-color: white;
+}
+
+#pokedex_input {
+    
+    border-style: none;
+}
+
+#pokedex_card{
+    border-color: black;
+}
+
+#pokedex_card_title {    
+    background-color: #dc3545;
+    color: white; 
+    border-style: solid;
+    border-color: black;
+}
+
+#pokedex_card_body {   
+    border-style: solid;
+    border-color: black;
+}
+
+#pokedex_card_footer {   
+    border-style: solid;
+    border-color: black;
+    background-color: gainsboro;
+}
+
+#class_type {
+    margin-right: 10px;
+    margin-left: 10px;
+    border-radius: 30px;
+    color: #F8F8F8
+}

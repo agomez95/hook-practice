@@ -1,0 +1,86 @@
+1. Creamos el proyecto hook-app
+2. Ahora crearemos el HookApp.jsx donde se alojara el archivo principal del proyecto
+3. Copiaremos el link de las librerias de bootstrap en el index.html: <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+4. Ahora crearemos el primer hook que ese un useState: CounterApp
+    4.1 La operacion de conteo sera interesante porque se desglosa un objeto dentro del estado: onClick={() => setCounter({...counter, counter1: counter1+1})}
+5. Lo siguiente es un custom hook creado para el archivo 'CounterCustomHook'
+    5.1 Se crea el custom hook de nombre 'useCounter'
+    5.2 useCounter poseera el contador por defecto de 10 que sera retornado en el componente hijo
+    5.3 Se crean 3 funciones que son 'increment', 'decrement', 'reset' y de esa forma se retorna desde el custom hook
+    5.4 Para llamar las funciones de este hook se debe instanciar como 'propiedad' cada funcion en el componente: const {counter, increment, decrement, reset} = useCounter()
+    5.5 En los metodos onClick se llama cada propiedad instanciada
+    5.6 Si se plantea que como parametro que cada funcion del hook reciba un valor para trabajar 'value=1' por default entonces en el componente se debe mandar asi el envento onClick: () => increment()/decrement()
+6. Ahora haremos uso de useEffect pero primero se necesita mantener el estado pero mientras usaremos el 'useState'
+    6.1 Este sera el useState: const [formState, setFormState] = useState({..})
+    6.2 Por medio del 'onChange' usaremos el event.target para que este en la funcion 'onInputChange' los desgloce en const: {name, value} = target
+    6.3 Esto hara que sea actualizable los inputs y los estados cambiantes
+    6.4 El uso del 'useEffect' va ser vinculado a los cambios del 'formState' masomenos asi: useEffect(() => {console.log('email changed')}, [email])
+    6.5 El uso de 'useEffect' es recomendado como buena practica ya que el disparo de alguna accion consecuente de algun cambio de estado puede ser beneficioso al momento de traer o disponer de datos, revisar docs
+7. Crearemos un function component de prueba para hacer un mensaje montado y desmontado de acuerdo a la edicion de un estado
+    7.1 Se llamara 'Message.jsx' en donde usaremos este subcomponente para enviar un mensaje cuando se actualiza el campo de usuario
+    7.2 Para ello simplemente en el componente padre hacemos la siguiente sentencia: {(username === 'adrian2') && <Message/>}
+    7.3 Ahora en el componente hijo primer retornamos el mensaje con un <><h3>El usuario...
+    7.4 Ahora usaremos todo el body del useEffect que cada que se dispare la sentencia de arriba por medio de este efecto cargara un mensaje en la consola 
+    7.5 Cuando volvamos a cambiar el usuario a otro que no afecte la sentencia volvera a lanzar otro mensaje a la consola
+    7.6 El efecto que se menciona estara en la carpeta works como Message.txt
+8. Crearemos otra funcion de limpieza ahora con el movimiento del mouse para capturar cordenadas
+    8.1 Primero al igual que en el anterior usaremos otro body del useEffect pero en este caso creremos una funcion de flecha que recivira un evento que lo desglozaremos en cordenas(x,y) asi: const onMouseMove = ({x,y}) => {...
+    8.2 Dentro de la funcion setearemos las coordenadas no sin antes crear un useState para controlar los estados de esas dichas variables: const [cords, setCords] = useState({x:0, y:0})
+    8.3 Ahora que tenemos esas variables de estado seteamos las cordenadas: setCords({x,y})
+    8.4 Ahora dentro del cuerpo del useEffect vamos a declara un evento de la ventana asi:  window.addEventListener(nombre_del_event,evento)
+    8.5 Con el mentodo anterior vamos a capturar el movimiento del mouse usando el 'mousemove', con eso enviamos ese evento de movimiento a la funcion donde desglozaremos el evento y capturar las cordenadas x, y: window.addEventListener('mousemove', onMouseMove)
+    8.6 El evento es enviado automanticamente a la funcion por lo que tecnicamente disparara la captura de movimiento siempre y cuando el nombre de usuario este en 'adrian2'
+    8.7 Pero si quitamos el nombre el evento no se cargara gracias al: window.removeEventListener('mousemove', onMouseMove) que removera el evento del movimiento del mouse
+9. Crearemos otra funcion para hacer un consumo de API mediante fetch mediante un componente y un custom hook
+    9.1 Se crea el 'MultipleCustomHooks' component para que ahi enviemos el 'url' hacia el custom hook 'useFetch'
+    9.2 En 'useFetch' podremos hacer el call del api que enviamos a traves del componente padre mediante un useState que manejara las propiedades de: data, isLoading, hasError
+    9.3 Digamos que data sera la informacion que recibamos del api convertida en un objeto, isLoading un estado de carga si es true cuando no ha traido nada y false cuando si, hasError si trajo algun error al momento de hacer el fetch
+    9.4 Mediante el: const getFetch = async () => {... sera traer con un url la data trabajando con el setState la informacion de las propiedas ya nombradas con anterioridad primero limpiandolas, luego trayendo la data y finalmente sumando esa data al state
+    9.5 para que el 'getFetch' se dispare, codificamos un useEffect que se dispara cuando recibamos el url accionando la funcion del fetch y asi retornar finalmente la informacion del state
+    9.6 Fuera de este ejercicio meti el api pokemon y empece la primera construccion de mi pokedex asi que para empezar esta bien jaja
+10. Ahora haremos uso del 'memo' para guardar el estado de un componente
+    10.1 Primero creamos el componente padre de Memorize y le importamos el hook de counter 
+    10.2 Creamos el componente hijo de Small donde enviamos el valor del counter para que imprima un mensaje por consola cada que sumamos 1 numero extra al 10
+    10.3 Ahora en em Memorize creamos un componente de estado tambien: const [show, setShow] = useState(true)
+    10.4 Con ese componente creamos un boton que actuliza su estado false a true pero cada que se da click tambien se imprime el mensaje de consola del subcomponente Small
+    10.5 Para evitar que se recargue ese componente cada que usamos una funcion en un componente padre usaremos el memo asi: export const Small = memo(...)
+    10.6 Lo que hace el memo es basicamente encapsular un componente que unicamente volvera a funcionar si se interactua directamente con el(la funcion increment hace que se re envie el valor del counter a diferencia del show que solo esta en Memorize)
+11. consecuente al MemorizeWithHook hicimos un hook que seria 'useMemo' que basicamente hizo:
+    11.1 El Hook basicamente encapsula todo en una constante(siendo usado mas que todo con funciones que se disparan cada que cambia el valor de una variable)
+    11.2 Primero se creo la funcion a disparar: heavyStuff = (iterationNumber = 100) => {... return `${iterationNumber} interaciones realizadas`}
+    11.3 Aqui la encapsulamos: const memorizedValue = useMemo(() => heavyStuff(counter), [counter])
+    11.4 Y aqui la imprimimos <h4>{memorizedValue}</h4>
+12. Se empieza el uso del hook Reducer asi que se hara por partes y subpartes:
+    12.1 Se crea un archivo js para la introduccion donde creamos un estado inicial donde ingresamos un todo:
+        12.1.1 El primer paso es crear el estado inicial que tendra 3 propiedades(1)
+        12.1.2 El segundo es realizar la funcion sincrona de Reducer sin hook cosa que vemos como funciona, donde se envia el estado y una accion(2) ademas que aqui jamas se usara algun tipo de funcion asincrona dentro del reduer o eso creo
+        12.1.3 El tercer paso es declarar una constante 'todos'(3) para que esta pueda interactuar con el reducer y ser llamado con un console.log(4)
+        12.1.4 La siguiente parte es crear un nuevo estado, para ello se hace un 'newTodo'(5)
+        12.1.5 Con el newTodo listo lo que sigue es crear la 'accion' que se envia al reducer que se titulara 'addTodoAction' que tendra como propiedades el tipo y el payload que es el contenido que alterara el estado inicial(6)
+        12.1.6 Ahora para instanciar esa accion se agrega en el reducer el if que comprarara el tipo de accion que se envie dando como resultado una edicion del estado:  return [...state, action.payload] OJO jamas usar un .push() porque eso no es la forma correcta para alterar el estador(7)
+        12.1.7 Ahora solo llamamos al 'todos' y le enviamos el estado inicial(todos) y la accion 'addTodoAction' (8) y finalmente se imprime
+    12.2 Se crea un archivo 'TodoApp' y un subarchivo 'todoReducer':
+        12.2.1 El primer paso en el TodoApp es crear el 'initialState' que tendra 2 tareas
+        12.2.2 El segundo paso es crear la vista de la lista con una etiqueta 'ul'
+        12.2.3 El tercer paso es iniciar el hook 'useReducer' que dispone de los 'todos' para visualizarlos y el 'dispatch' es cuando solo tenemos un reducer, fuera el caso que tenemos mas le ponemos un dispatchTodo para diferenciar pero en si el dispatch es la funcion que despacha acciones al reducer
+            12.2.3.1 https://es.reactjs.org/docs/hooks-reference.html#usereducer / El useReducer es como el useState, solo que maneja de forma mas apropiada el funcionamiento de los componentes a traves de lo que se le envia(como ejemplo puse el todoReducer y el initialState) REVISAR DOCUMENTACION
+        12.2.4 El cuarto paso es el reducer del Todo que lo creamos en un js y lo exportamos en el TodoApp para que realice o controle las acciones que se invoquen ..ver mas adelante
+        12.2.5 Se crea el primer comoponente 'TodoList' donde se envia como propiedad el todos y dentro se crea otro objeto 'TodoItem' donde se imprimen las descripciones una por una
+            12.2.5.1 Se crea el 'handleNewTodo' que basicamente recibira del siguiente componente TodoAdd la propiedad de: const handleNewTodo = (todo) => {}
+        12.2.6 Se crea el componente 'TodoAdd' donde se trabaja lo siguiente:
+            12.2.6.1 Se crea primero el formulario para agregar una tarea, aderiendole varias propiedades tales como value, onChange, onSubmit y name
+            12.2.6.2 Se instancia nuestros hooks personalizados que en este caso seria 'useForm' que como bien sabemos nos ayudara a manejar todo lo que concierne a los input de un formulario trayendo con nosotros el 'onInputChange', 'onResetForm' ademas de nosotros agregarle el 'description' para que este pueda limpiar los valores que cambien 
+            12.2.6.3 Se crea la funcion de 'onFormSubmit' que controlara el evento de cambio de la descripcion haciendo que este valide primero que exista y luego enviandola con un 'newTodo' al componente padre del paso 12.2.5.1
+            12.2.6.4 Luego de enviar la propiedad esta se limpia y se reinicia el formulario
+        12.2.7 Ahora lo que sigues es cambiar el todoReducer pero en este caso al switch se le agrega la action 'Add' para que este mute el estado inicial adheriendole el nuevo payload: return [...initialState, action.payload]
+        12.2.8 Ahora declaramos la acción dentro del handleNewTodo y enviamos el todo como payload
+            12.2.8.1 El dispatch es la funcion por donde se manda la funcion
+        12.2.9 Lo que haremos ahora es usar el localStorage del navegador y para ello primero comentamos el initialState de los todos
+        12.2.10 En el decimo paso es crear un useEffect para que cada que el todos cambie su estado se actualize en el storage los todos nuevos, esto funciona gracias al localStorage.setItem('todos', JSON.stringify(todos)) donde ira el primera parametro que es el nombre de la variable y el contenido de esta
+        12.2.11 Ahora que tenemos el efecto para rellenar el localStorage, se hace una funcion que haga persistente el contenido de los todos mediante 'init' del reducer que hará que toda esta info almacenada siga viva en el navegador: return JSON.parse(localStorage.getItem('todos')) || [] 
+        12.2.12 En el todoReducer vamos a agregar una funcion de eliminacion '[TODO] Remove Todo' que funcionara con retornara un array nuevo, en este caso el array sera procedente del estado inicial que sera filtrado cada uno de sus elementos y que estos tengan un id diferente al del payload que sera un id que envio desde el App: return initialState.filter(todo => todo.id !== action.payload)
+        12.2.13 Se crea la funcion para manejar las eliminaciones
+            12.2.13.1 Aqui se manda el id por el payload para que pueda efectuarse el paso anterior del filter y devolver un nuevo array
+        12.2.14 En este paso lo que hacemos es enviar del componente padre a los componentes hijos el metodo de borrado por medio del 'onDeleteTodo' que recorrera el list y el item y en este ultimo es donde mandamos por medio de una funcion onClick el onDeleteTodo(todo.id) 
+        12.2.15 En el punto 15 lo unico que se hizo fue hacer una funcion de update para la lista donde al igual que el delete mande el 'id' y mediante un '.map' edito la propiedad del done en el todoReducer
+        12.2.16 Se creo un hook useTodos para almacenar toda la logia fuera de la app
